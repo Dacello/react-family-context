@@ -1,5 +1,50 @@
 import React, { Component } from 'react';
-const FamilyContext = React.createContext();
+const { Provider, Consumer } = React.createContext();
+
+const Person = props => (
+  <div className="Person">
+    <div className="Person-name">{props.person.name}</div>
+    <div className="Person-member">{props.person.member}</div>
+  </div>
+);
+
+const Family = props => (
+  <Consumer>
+    {context => (
+      <React.Fragment>
+        {context.state.family.map(person =>
+          <Person key={person.name} person={person} />
+        )}
+      </React.Fragment>
+    )}
+  </Consumer>
+);
+
+const FamilyMemberForm = props => (
+  <Consumer>
+    {context => (
+      <form onSubmit={context.actions.addFamilyMember}>
+        <div className="FormRow">
+          <label htmlFor="name">Name: </label>
+          <input
+            name="name"
+            onChange={context.actions.onInputChange}
+          />
+        </div>
+        <div className="FormRow">
+          <label htmlFor="member">Family Member: </label>
+          <input
+            name="member"
+            onChange={context.actions.onInputChange}
+          />
+        </div>
+        <div className="FormRow">
+          <button>Add a Family Member</button>
+        </div>
+      </form>
+    )}
+  </Consumer>
+);
 
 class FamilyProvider extends Component {
   state = {
@@ -39,62 +84,17 @@ class FamilyProvider extends Component {
 
   render() {
     return (
-      <FamilyContext.Provider
+      <Provider
         value={{
           state: this.state,
           actions: this.actions
         }}
       >
         {this.props.children}
-      </FamilyContext.Provider>
+      </Provider>
     );
   }
 }
-
-const Person = props => (
-  <div className="Person">
-    <div className="Person-name">{props.person.name}</div>
-    <div className="Person-member">{props.person.member}</div>
-  </div>
-);
-
-const Family = props => (
-  <FamilyContext.Consumer>
-    {context => (
-      <React.Fragment>
-        {context.state.family.map(person =>
-          <Person key={person.name} person={person} />
-        )}
-      </React.Fragment>
-    )}
-  </FamilyContext.Consumer>
-);
-
-const FamilyMemberForm = props => (
-  <FamilyContext.Consumer>
-    {context => (
-      <form onSubmit={context.actions.addFamilyMember}>
-        <div className="FormRow">
-          <label htmlFor="name">Name: </label>
-          <input
-            name="name"
-            onChange={context.actions.onInputChange}
-          />
-        </div>
-        <div className="FormRow">
-          <label htmlFor="member">Family Member: </label>
-          <input
-            name="member"
-            onChange={context.actions.onInputChange}
-          />
-        </div>
-        <div className="FormRow">
-          <button>Add a Family Member</button>
-        </div>
-      </form>
-    )}
-  </FamilyContext.Consumer>
-);
 
 class App extends Component {
   render() {
