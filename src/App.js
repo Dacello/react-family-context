@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 const Person = props => (
   <div className="Person">
     <div className="Person-name">{props.person.name}</div>
-    <div className="Person-memberType">{props.person.member}</div>
+    <div className="Person-member">{props.person.member}</div>
   </div>
 );
 
@@ -58,8 +58,8 @@ class App extends Component {
     if (!results.name || !results.member) return;
 
     const family = this.state.family.concat([{
-      name: this.state.results.name,
-      member: this.state.results.member
+      name: results.name,
+      member: results.member
     }]);
 
     this.setState({ family });
