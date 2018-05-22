@@ -3,8 +3,8 @@ const FamilyContext = React.createContext();
 
 class FamilyProvider extends Component {
   state = {
-    results: {},
-    family: []
+    family: [],
+    results: {}
   };
 
   onInputChange = (e) => {
