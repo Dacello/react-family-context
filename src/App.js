@@ -4,7 +4,7 @@ const FamilyContext = React.createContext();
 class FamilyProvider extends Component {
   state = {
     results: {},
-    family: [{name: 'Daniel', member: 'Me'}]
+    family: []
   };
 
   onInputChange = (e) => {
