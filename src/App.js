@@ -48,7 +48,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1>My Family's Context</h1>
+        <h1>{"My Family's Context"}</h1>
         <Family members={family} />
         <form onSubmit={this.addFamilyMember}>
           <div className="FormRow">
