@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.App {
+  padding: 20px;
+}
+
+.Person {
+  margin: 20px 0;
+}
+.Person-name {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.FormRow {
+  margin: 20px 0;
+}
