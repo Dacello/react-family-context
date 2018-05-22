@@ -1,23 +1,45 @@
 import React, { Component } from 'react';
 
 const Person = props => (
-  <li className="Person">
+  <div className="Person">
     <div className="Person-name">{props.person.name}</div>
     <div className="Person-memberType">{props.person.member}</div>
-  </li>
+  </div>
 );
 
 const Family = props => (
-  <ul className="family">
+  <React.Fragment>
     {props.members.map(member =>
       <Person key={member.name} person={member} />
     )}
-  </ul>
+  </React.Fragment>
+);
+
+const FamilyForm = props => (
+  <form onSubmit={props.addFamilyMember}>
+    <div className="FormRow">
+      <label htmlFor="name">Name: </label>
+      <input
+        name="name"
+        onChange={props.onInputChange}
+      />
+    </div>
+    <div className="FormRow">
+      <label htmlFor="member">Family Member: </label>
+      <input
+        name="member"
+        onChange={props.onInputChange}
+      />
+    </div>
+    <div className="FormRow">
+      <button>Add a Family Member</button>
+    </div>
+  </form>
 );
 
 class App extends Component {
   state = {
-    family: [{ name: 'Daniel', member: 'Me' }],
+    family: [],
     results: {}
   };
 
@@ -50,25 +72,10 @@ class App extends Component {
       <div className="App">
         <h1>{"My Family's Context"}</h1>
         <Family members={family} />
-        <form onSubmit={this.addFamilyMember}>
-          <div className="FormRow">
-            <label htmlFor="name">Name: </label>
-            <input
-              name="name"
-              onChange={this.onInputChange}
-            />
-          </div>
-          <div className="FormRow">
-            <label htmlFor="member">Family Member: </label>
-            <input
-              name="member"
-              onChange={this.onInputChange}
-            />
-          </div>
-          <div className="FormRow">
-            <button>Add a Family Member</button>
-          </div>
-        </form>
+        <FamilyForm
+          addFamilyMember={this.addFamilyMember}
+          onInputChange={this.onInputChange}
+        />
       </div>
     );
   }
