@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+const { Provider, Consumer } = React.createContext();
 
 const Person = props => (
   <div className="Person">
@@ -8,36 +9,44 @@ const Person = props => (
 );
 
 const Family = props => (
-  <React.Fragment>
-    {props.members.map(member =>
-      <Person key={member.name} person={member} />
+  <Consumer>
+    {context => (
+      <React.Fragment>
+        {context.state.family.map(person =>
+          <Person key={person.name} person={person} />
+        )}
+      </React.Fragment>
     )}
-  </React.Fragment>
+  </Consumer>
 );
 
-const FamilyForm = props => (
-  <form onSubmit={props.addFamilyMember}>
-    <div className="FormRow">
-      <label htmlFor="name">Name: </label>
-      <input
-        name="name"
-        onChange={props.onInputChange}
-      />
-    </div>
-    <div className="FormRow">
-      <label htmlFor="member">Family Member: </label>
-      <input
-        name="member"
-        onChange={props.onInputChange}
-      />
-    </div>
-    <div className="FormRow">
-      <button>Add a Family Member</button>
-    </div>
-  </form>
+const FamilyMemberForm = props => (
+  <Consumer>
+    {context => (
+      <form onSubmit={context.actions.addFamilyMember}>
+        <div className="FormRow">
+          <label htmlFor="name">Name: </label>
+          <input
+            name="name"
+            onChange={context.actions.onInputChange}
+          />
+        </div>
+        <div className="FormRow">
+          <label htmlFor="member">Family Member: </label>
+          <input
+            name="member"
+            onChange={context.actions.onInputChange}
+          />
+        </div>
+        <div className="FormRow">
+          <button>Add a Family Member</button>
+        </div>
+      </form>
+    )}
+  </Consumer>
 );
 
-class App extends Component {
+class FamilyProvider extends Component {
   state = {
     family: [],
     results: {}
@@ -53,6 +62,7 @@ class App extends Component {
 
   addFamilyMember = e => {
     e.preventDefault();
+
     const { results } = this.state;
 
     if (!results.name || !results.member) return;
@@ -65,18 +75,35 @@ class App extends Component {
     this.setState({ family });
   };
 
-  render() {
-    const { family } = this.state;
+  get actions() {
+    return {
+      addFamilyMember: this.addFamilyMember,
+      onInputChange: this.onInputChange
+    };
+  };
 
+  render() {
     return (
-      <div className="App">
+      <Provider
+        value={{
+          state: this.state,
+          actions: this.actions
+        }}
+      >
+        {this.props.children}
+      </Provider>
+    );
+  }
+}
+
+class App extends Component {
+  render() {
+    return (
+      <FamilyProvider>
         <h1>{"My Family's Context"}</h1>
-        <Family members={family} />
-        <FamilyForm
-          addFamilyMember={this.addFamilyMember}
-          onInputChange={this.onInputChange}
-        />
-      </div>
+        <Family />
+        <FamilyMemberForm />
+      </FamilyProvider>
     );
   }
 }
